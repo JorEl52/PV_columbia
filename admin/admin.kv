@@ -1,0 +1,875 @@
+#:import hex kivy.utils.get_color_from_hex
+
+<BotonOscuro@Button>:
+    backgroud_normal: ''
+    background_color: hex('#131314')
+
+<LabelOscuro@Label>:
+    canvas.before:
+        Color:
+            rgba: hex('#131314')
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<AdminRV>:
+    SelectableRecycleBoxLayout:
+        default_size: None, dp(36)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        multiselect: False
+        touch_multiselect: False
+
+<SelectableProductoLabel>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: hex('#BE1C1C') if self.selected else hex('#F0F0F0')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: _hashtag
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _codigo
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _articulo
+        size_hint_x: .45
+        color: (0,0,0,1)
+    Label:
+        id: _talla
+        size_hint_x: .1
+        color: (0,0,0,1)
+    Label:
+        id: _cantidad
+        size_hint_x: .125
+        color: (0,0,0,1)
+    Label:
+        id: _precio
+        size_hint_x: .125
+        color: (0,0,0,1)
+
+<SelectableUsuarioLabel>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: hex('#BE1C1C') if self.selected else hex('#F0F0F0')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: _hashtag
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _nombre
+        size_hint_x: .35
+        color: (0,0,0,1)
+    Label:
+        id: _username
+        size_hint_x: .35
+        color: (0,0,0,1)
+    Label:
+        id: _tipo
+        size_hint_x: .25
+        color: (0,0,0,1)
+
+<SelectableVentaLabel>:
+    canvas.before:
+        Color:
+            rgba: hex('#BE1C1C') if self.selected else hex('#F0F0F0')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: _hashtag
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _username
+        size_hint_x: .2
+        color: (0,0,0,1)
+    Label:
+        id: _cantidad
+        size_hint_x: .2
+        color: (0,0,0,1)
+    Label:
+        id: _total
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _time
+        size_hint_x: .2
+        color: (0,0,0,1)
+    Label:
+        id: _date
+        size_hint_x: .2
+        color: (0,0,0,1)
+
+<ItemVentaLabel>:
+    canvas.before:
+        Color:
+            rgba: hex('#F0F0F0')
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    Label:
+        id: _hashtag
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _codigo
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _articulo
+        size_hint_x: .25
+        color: (0,0,0,1)
+    Label:
+        id: _talla
+        size_hint_x: .1
+        color: (0,0,0,1)
+    Label:
+        id: _cantidad
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _precio_por_articulo
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _total
+        size_hint_x: .15
+        color: (0,0,0,1)
+    
+<ProductoPopup>:
+    size_hint: .5, .5
+    auto_dismiss: False
+    title: ''
+    BoxLayout:
+        orientation: 'vertical'
+        padding: .05
+        BoxLayout:
+            size_hint_y: .15
+            Label:
+                id: producto_info_1
+        Label:
+            id: no_valid_notif
+            size_hint_y: .05
+        TextInput:
+            size_hint_y: .2
+            id: producto_codigo
+            multiline: False
+            hint_text: 'Código'
+            write_tab: False
+        TextInput:
+            size_hint_y: .2
+            id: producto_nombre
+            multiline: False
+            hint_text: 'Nombre'
+            write_tab: False
+        BoxLayout:
+            size_hint_y: .2
+            TextInput:
+                id: producto_talla
+                multiline: False
+                hint_text: 'Talla'
+                write_tab: False
+            TextInput:
+                id: producto_cantidad
+                multiline: False
+                hint_text: 'Cantidad'
+                write_tab: False
+            TextInput:
+                id: producto_precio
+                multiline: False
+                hint_text: 'Precio'
+                write_tab: False
+        BoxLayout:
+            size_hint_y: .2
+            Button:
+                text: 'Aceptar'
+                on_release: root.verificar(producto_codigo.text, producto_nombre.text, producto_talla.text, producto_cantidad.text, producto_precio.text)
+            Button:
+                text: 'Salir sin hacer cambios'
+                on_press: root.dismiss()
+
+<UsuarioPopup>:
+    size_hint: .5, .5
+    auto_dismiss: False
+    title: ''
+    BoxLayout:
+        orientation: 'vertical'
+        padding: .05
+        Label:
+            size_hint_y: .1
+            id: usuario_info_1
+        Label:
+            id: no_valid_notif
+            size_hint_y: .1
+        TextInput:
+            size_hint_y: .2
+            id: usuario_username
+            multiline: False
+            hint_text: 'Username'
+            write_tab: False
+        TextInput:
+            size_hint_y: .2
+            id: usuario_nombre
+            multiline: False
+            hint_text: 'Nombre'
+            write_tab: False
+        BoxLayout:
+            size_hint_y: .2
+            TextInput:
+                size_hint_x: .5
+                id: usuario_password
+                multiline: False
+                hint_text: 'Password'
+                password: True
+                write_tab: False
+            ToggleButton:
+                size_hint_x: .25
+                id: admin_tipo
+                text: 'Admin'
+                group: 'usuario_tipo'
+            ToggleButton:
+                size_hint_x: .25
+                id: trabajador_tipo
+                text: 'Trabajador'
+                group: 'usuario_tipo'
+        BoxLayout:
+            size_hint_y: .2
+            Button:
+                text: 'Aceptar'
+                on_release: root.verificar(usuario_username.text, usuario_nombre.text, usuario_password.text, admin_tipo.state, trabajador_tipo.state)
+            Button:
+                text: 'Salir sin hacer cambios'
+                on_press: root.dismiss()
+
+<InfoVentaPopup>:
+    size_hint: .5,.5
+    title: 'Información de venta seleccionada:'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: .05
+        BoxLayout:
+            size_hint_y: .1
+            LabelOscuro:
+                text: '#'
+                size_hint_x: .05
+            LabelOscuro:
+                text: 'Código'
+                size_hint_x: .15
+            LabelOscuro:
+                text: 'Nombre'
+                size_hint_x: .25
+            LabelOscuro:
+                text: 'Talla'
+                size_hint_x: .1
+            LabelOscuro:
+                text: 'Cantidad'
+                size_hint_x: .15
+            LabelOscuro:
+                text: '$/Artículo'
+                size_hint_x: .15
+            LabelOscuro:
+                text: 'Total'
+                size_hint_x: .15
+        AdminRV:
+            id: info_rv
+            viewclass: 'ItemVentaLabel'
+        BoxLayout:
+            size_hint_y: .1
+            LabelOscuro:
+                text: 'Artículos vendidos:'
+                size_hint_x: .25
+            LabelOscuro:
+                id: total_items
+                size_hint_x: .25
+            LabelOscuro:
+                text: 'Total vendido: '
+                size_hint_x: .25
+            LabelOscuro:
+                id: total_dinero
+                size_hint_x: .25
+
+<GuardarArchivoPopup>:
+    size_hint: .8,.8
+    title: 'Seleccione la ubicación'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: .05
+        FileChooserListView:
+            id: filechooser
+            filters: ['']
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            spacing: 5
+            Button:
+                text: 'Guardar'
+                on_release: root.guardar_archivo(filechooser.path)
+            Button:
+                text: 'Cancelar'
+                on_release: root.dismiss()
+
+<VistaProductos>:
+    name: 'Productos'
+    BoxLayout:
+        BoxLayout:
+            padding: .5
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint_y: .05
+                spacing: .5
+                LabelOscuro:
+                    text: '#'
+                    size_hint_x: .05
+                LabelOscuro:
+                    text: 'Código de Artículo'
+                    size_hint_x: .15
+                LabelOscuro:
+                    text: 'Artículo'
+                    size_hint_x: .45
+                LabelOscuro:
+                    text: 'Talla'
+                    size_hint_x: .1
+                LabelOscuro:
+                    text: 'Cantidad'
+                    size_hint_x: .125
+                LabelOscuro:
+                    text: 'Precio'
+                    size_hint_x: .125
+            AdminRV:
+                id: rv_productos
+                size_hint_y: .89
+                viewclass: 'SelectableProductoLabel'
+        BoxLayout:
+            spacing: .5
+            size_hint_x: .2
+            orientation: 'vertical'
+            padding: .5
+            BotonOscuro:
+                text: 'Agregar Producto'
+                on_release: root.agregar_producto()
+            BotonOscuro:
+                text: 'Modificar Producto'
+                on_release: root.modificar_producto()
+            BotonOscuro:
+                text: 'Eliminar Producto'
+                on_release: root.eliminar_producto()
+            BotonOscuro:
+                text: 'Enviar Inventario'
+                on_release: root.enviar_inventario()
+
+<VistaUsuarios>:
+    name: 'Usuarios'
+    BoxLayout:
+        BoxLayout:
+            padding: .5
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint_y: .05
+                spacing: .5
+                LabelOscuro:
+                    text: '#'
+                    size_hint_x: .05
+                LabelOscuro:
+                    text: 'Nombre'
+                    size_hint_x: .35
+                LabelOscuro:
+                    text: 'Usuario'
+                    size_hint_x: .35
+                LabelOscuro:
+                    text: 'Tipo'
+                    size_hint_x: .25
+            AdminRV:
+                id: rv_usuarios
+                size_hint_y: .89
+                viewclass: 'SelectableUsuarioLabel'
+        BoxLayout:
+            spacing: .5
+            size_hint_x: .2
+            orientation: 'vertical'
+            padding: .5
+            BotonOscuro:
+                text: 'Agregar Usuario'
+                on_release: root.agregar_usuario()
+            BotonOscuro:
+                text: 'Modificar Usuario'
+                on_release: root.modificar_usuario()
+            BotonOscuro:
+                text: 'Eliminar Usuario'
+                on_release: root.eliminar_usuario()
+
+<VistaVentas>:
+    name: 'Ventas'
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y:.05
+            spacing: .5
+            padding: .5
+            LabelOscuro:
+                id: notificacion
+                text: 'Datos de ventas'
+                size_hint_x: .4
+            LabelOscuro:
+                text: 'Viendo: '
+                size_hint_x: .1
+            LabelOscuro:
+                id: date_id
+                size_hint_x: .2
+                text: 'Hoy'
+            LabelOscuro:
+                text: 'Total'
+                size_hint_x: .1
+            LabelOscuro:
+                id: final_sum
+                size_hint_x: .2
+        BoxLayout:
+            size_hint_y: .1
+            spacing: .5
+            padding: .5
+            LabelOscuro:
+                text: '#'
+                size_hint_x: .05
+            LabelOscuro:
+                text:'Nombre de cuenta'
+                size_hint_x: .2
+            LabelOscuro:
+                text: 'Productos vendidos'
+                size_hint_x: .2
+            LabelOscuro:
+                text: 'Total'
+                size_hint_x: .15
+            LabelOscuro:
+                text: 'Hora'
+                size_hint_x: .2
+            LabelOscuro:
+                text: 'Fecha'
+                size_hint_x: .2
+        AdminRV:
+            id: ventas_rv
+            viewclass: 'SelectableVentaLabel'
+        BoxLayout:
+            size_hint_y: .07
+            spacing: .5
+            padding: .5
+            LabelOscuro:
+                text: 'Fecha específica:'
+            TextInput:
+                id: single_date
+                multiline: False
+                hint_text: 'dd/mm/aa'
+                write_tab: False
+                on_text_validate: root.cargar_venta('Date')
+            LabelOscuro:
+                text: 'Rango de fechas:'
+            TextInput:
+                id: initial_date
+                multiline: False
+                hint_text: 'dd/mm/aa'
+                write_tab: False
+                on_text_validate: root.cargar_venta('Range')
+            LabelOscuro:
+                text: '-'
+                size_hint_x: .06
+            TextInput:
+                id: last_date
+                multiline: False
+                hint_text: 'dd/mm/aa'
+                write_tab: False
+                on_text_validate: root.cargar_venta('Range')
+            BotonOscuro:
+                text: 'Hoy'
+                on_release: root.cargar_venta('Default')
+            BotonOscuro:
+                text: 'Mas Info'
+                on_release: root.mas_info()
+            BotonOscuro:
+                text: 'Guardar en CSV'
+                on_release: root.crear_csv()
+
+<SelectableEstadisticasLabel>:
+    canvas.before:
+        Color:
+            rgba: hex('#BE1C1C') if self.selected else hex('#F0F0F0')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: _hashtag
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _codigo
+        size_hint_x: .1
+        color: (0,0,0,1)
+    Label:
+        id: _articulo
+        size_hint_x: .4
+        color: (0,0,0,1)
+    Label:
+        id: _talla
+        size_hint_x: .15
+        color: (0,0,0,1)
+    Label:
+        id: _total_vendidos
+        size_hint_x: .2
+        color: (0,0,0,1)
+
+<SelectableInventarioAntiguoLabel>:
+    canvas.before:
+        Color:
+            rgba: hex('#F0F0F0') 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        id: _prenda
+        size_hint_x: .2
+        color: (0,0,0,1)
+    Label:
+        id: _2
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _3
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _4
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _6
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _8
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _10
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _12
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _14
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _16
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _18/28
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _20
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _22
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _24
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _30
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _32
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _34
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _36
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _38
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _40
+        size_hint_x: .028
+        color: (0,0,0,1)
+    Label:
+        id: _CH/42
+        size_hint_x: .053
+        color: (0,0,0,1)
+    Label:
+        id: _MD/44
+        size_hint_x: .053
+        color: (0,0,0,1)
+    Label:
+        id: _GD/46
+        size_hint_x: .053
+        color: (0,0,0,1)
+    Label:
+        id: _XGD
+        size_hint_x: .05
+        color: (0,0,0,1)
+    Label:
+        id: _Total
+        size_hint_x: .053
+        color: (0,0,0,1)
+
+<VistaEstadisticas>:
+    name: 'Estadísticas de venta'
+    BoxLayout:
+        padding:.5
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .05
+            spacing: .5
+            LabelOscuro:
+                text: '#'
+                size_hint_x: .05
+            LabelOscuro:
+                text:'Código'
+                size_hint_x: .1
+            LabelOscuro:
+                text: 'Artículo'
+                size_hint_x: .4
+            LabelOscuro:
+                text: 'Talla'
+                size_hint_x: .15
+            LabelOscuro:
+                text: 'Total vendidos'
+                size_hint_x: .2
+        AdminRV:
+            id: estadisticas_rv
+            viewclass: 'SelectableEstadisticasLabel'
+
+<VistaInventarioAntiguo>:
+    name: 'Primer inventario'
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .05
+            spacing: .5
+            LabelOscuro:
+                size_hint_x: .2
+            LabelOscuro:
+                text:'Tallas'
+                size_hint_x: .75
+            LabelOscuro:
+                size_hint_x: .05
+        BoxLayout:
+            size_hint_y: .05
+            spacing:.5
+            padding: .5
+            LabelOscuro:
+                text: 'Prenda'
+                size_hint_x: .2
+            LabelOscuro:
+                text: '2'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '3'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '4'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '6'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '8'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '10'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '12'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '14'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '16'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '18/28'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '20'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '22'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '24'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '30'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '32'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '34'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '36'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '38'
+                size_hint_x: .028
+            LabelOscuro:
+                text: '40'
+                size_hint_x: .028
+            LabelOscuro:
+                text: 'CH/42'
+                size_hint_x: .053
+            LabelOscuro:
+                text: 'MD/44'
+                size_hint_x: .053
+            LabelOscuro:
+                text: 'GD/46'
+                size_hint_x: .053
+            LabelOscuro:
+                text: 'XGD'
+                size_hint_x: .05
+            LabelOscuro:
+                text: 'Total'
+                size_hint_x: .053
+        AdminRV:
+            id: inventario_antiguo_rv
+            viewclass: 'SelectableInventarioAntiguoLabel'
+        BoxLayout:
+            size_hint_y: .05
+            LabelOscuro:
+                size_hint_x: .7
+            LabelOscuro:
+                text: 'Total:'
+                size_hint_x: .2
+            LabelOscuro:
+                id: total_inventario
+                size_hint_x: .1
+
+<CustomDropDown>:
+    canvas.before:
+        Color:
+            rgba: hex('#FFFFFF')
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    Button:
+        text: 'Productos'
+        size_hint_y: None
+        height: 44
+        on_release: root.vista(self.text)
+    Button:
+        text: 'Usuarios'
+        size_hint_y: None
+        height: 44
+        on_release: root.vista(self.text)
+    Button:
+        text: 'Ventas'
+        size_hint_y: None
+        height: 44
+        on_release: root.vista(self.text)
+    Button:
+        text: 'Estadísticas de venta'
+        size_hint_y: None
+        height: 44
+        on_release: root.vista(self.text)
+    Button:
+        text: 'Primer inventario'
+        size_hint_y: None
+        height: 44
+        on_release: root.vista(self.text)
+
+
+<AdminWindow>:
+    id: main_win
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: hex('#253392')
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: .1
+        BoxLayout:
+            padding: .1
+            spacing: .2
+            BotonOscuro:
+                id: cambiar_vista
+                size_hint_x: .2
+                text: 'Cambiar vista'
+                on_release: root.cambiar_vista()
+            Label:
+                size_hint_x: .15
+                text: 'Discovering'
+                font_name: 'birthstone'
+                font_size: 30
+            BoxLayout:
+                size_hint_x: .15
+                canvas:
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                Image:
+                    source: "assets/logo_columbia.png"
+                    allow_stretch: True
+            Label
+                size_hint_x: .15
+                text: 'Knowledge'
+                font_name: 'birthstone'
+                font_size: 30
+            BotonOscuro:
+                id: boton_venta
+                size_hint_x: .2
+                text: 'Ir a venta'
+                on_release: root.venta()
+            BotonOscuro:
+                id: boton_signout
+                size_hint_x: .15
+                text: 'Salir de Cuenta'
+                on_release: root.signout()
+
+    ScreenManager:
+        id: vista_manager
+        canvas.before:
+            Color:
+                rgba: hex('#FFFFFF')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        VistaProductos:
+            id: vista_productos
+        VistaUsuarios:
+            id: vista_usuarios
+        VistaVentas:
+            id: vista_ventas
+        VistaEstadisticas:
+            id: vista_estadisticas
+        VistaInventarioAntiguo:
+            id: vista_inventario_antiguo
+
+    BoxLayout:
+        size_hint_y: .05
