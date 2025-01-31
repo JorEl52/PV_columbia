@@ -14,6 +14,7 @@ from kivy.uix.popup import Popup
 from kivy.core.text import LabelBase
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.label import Label
+from kivy.uix.image import Image as KivyImage
 from datetime import datetime, timedelta
 import csv
 from pathlib import Path
@@ -1008,6 +1009,16 @@ class AdminWindow(BoxLayout):
         self.vista_manager = self.ids.vista_manager
         self.dropdown = CustomDropDown(self.cambiar_vista)
         self.ids.cambiar_vista.bind(on_release=self.dropdown.open)
+
+        #imagen del logo en la interfaz
+        logo_path = os.path.join(current_dir,'..','assets', 'logo_columbia.png')
+
+        logo_image = KivyImage()
+        logo_image.source = logo_path
+        logo_image.allow_stretch = True
+        logo_image.size_hint_y = 1
+        
+        self.ids.image_logo.add_widget(logo_image)
 
     def cambiar_vista(self, cambio=False, vista=None):
         if cambio:

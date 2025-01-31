@@ -7,6 +7,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.popup import Popup
+from kivy.uix.image import Image
 from datetime import datetime, timedelta
 from kivy.clock import Clock
 from kivy.lang import Builder
@@ -261,6 +262,16 @@ class WindowVentas(BoxLayout):
         self.ahora = datetime.now()
         self.ids.fecha.text = self.ahora.strftime("%d/%m/%y")
         Clock.schedule_interval(self.actualizar_hora, 1)
+
+        #imagen del logo en la interfaz
+        logo_path = os.path.join(current_dir,'..','assets', 'logo_columbia.png')
+
+        logo_image = Image(
+            source = logo_path,
+            allow_stretch = True,
+            size_hint_y = 1
+        )
+        self.ids.image_logo.add_widget(logo_image)
 
     
     def actualizar_hora(self, *args):

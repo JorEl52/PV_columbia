@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.core.text import LabelBase
+from kivy.uix.image import Image
 import os
 from databases.sqlqueries import QueriesSQLite
 
@@ -33,6 +34,17 @@ class SigninWindow(BoxLayout):
         super().__init__(*kwargs)
         self.poner_usuario = poner_usuario_callback
         self.checar_tabla_usuarios()
+
+        #imagen del logo en la interfaz
+        logo_path = os.path.join(current_dir,'..','assets', 'logo_columbia.png')
+
+        logo_image = Image(
+
+            source = logo_path,
+            allow_stretch = True,
+            size_hint_y = 1
+        )
+        self.ids.image_logo.add_widget(logo_image)
 
     def checar_tabla_usuarios(self):
         if not users:

@@ -122,7 +122,7 @@ coll = COLLECT(
 )
 app = BUNDLE(
     coll,
-    name='touchtracer.app',
-    icon=None,
+    name='Ventas Columbia.app',
+    icon='icons/CS.icns',
     bundle_identifier=None,
 )
