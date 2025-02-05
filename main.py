@@ -126,7 +126,7 @@ class MainWindow(BoxLayout):
             update_file = os.path.join(tem_dir, f'PV_columbia-{version}.zip')
 
             #Crear respaldo rapido
-            Clock.schedule_once(lambda dt: self.show_progress_popup("Creando respaldo rápido..."))#Barra de progreso
+            Clock.schedule_once(lambda dt: self.show_progress_popup("Iniciando actualización..."))#Barra de progreso
 
             backup_dir = os.path.join(os.path.dirname(__file__), 'backup')
             os.makedirs(backup_dir, exist_ok=True)
@@ -137,33 +137,41 @@ class MainWindow(BoxLayout):
                 return [f for f in files if f in exclusions]
 
             logger.info('Creando respaldo...')
+            Clock.schedule_once(lambda dt: self.increment_progress(10, "Creando respaldo..."))
             shutil.copytree(os.path.dirname(__file__), backup_path, ignore=exclude_files)
             shutil.make_archive(backup_path, 'zip', backup_path)
             shutil.rmtree(backup_path)#Elimina la copia temporal despues de comprimir
 
-            Clock.schedule_once(lambda dt: self.update_progress(50, "Respaldo creado. Descargando actualización..."))#Barra de progreso actualizada
+            Clock.schedule_once(lambda dt: self.increment_progress(30, "Respaldo creado. Descargando actualización..."))#Barra de progreso actualizada
 
             logger.info('Descargando actualización....')
             response = requests.get(download_url, stream=True)
             if response.status_code == 200:
+                total_size = int(response.headers.get('content-length', 0))
+                download = 0
                 with open(update_file, 'wb') as f:
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)
+                        download += len(chunk)
+                        progress = 30 + int((download/total_size)*40)
+                        Clock.schedule_once(lambda dt, p=progress: self.increment_progress(p, "Descargando actualización..."))
                 logger.info('Descarga completa.')
             else:
                 logger.error(f"Error al descargar: {response.status_code}")
                 Clock.schedule_once(lambda dt: self.show_error_popup("No se pudo descargar la actualización."))
                 return
 
-            Clock.schedule_once(lambda dt: self.update_progress(75, "Instalando actualización..."))#Barra de progreso actualizada
-    
-            #Instalar actualizacion
-            logger.info('Instalando actualización....')
-            shutil.unpack_archive(update_file, os.path.dirname(__file__),'zip')
+            Clock.schedule_once(lambda dt: self.increment_progress(75, "Instalando actualización..."))#Barra de progreso actualizada
+            #extraer archivos
+            extract_path = os.path.join(tem_dir, "extracted")
+            os.makedirs(extract_path, exist_ok=True)
+            shutil.unpack_archive(update_file, extract_path,'zip')
+            #Copiar y reemplazar archivos
+            self.copy_and_remplace_with_progress(extract_path, os.path.dirname(__file__))
             #Limpiar archivos temporales
             shutil.rmtree(tem_dir)
             self.save_installed_version(version)
-            Clock.schedule_once(lambda dt: self.update_progress(100, "Actualización completada. Reiniciando aplicación..."))#Barra de progreso actualizada
+            Clock.schedule_once(lambda dt: self.increment_progress(100, "Actualización completada. Reiniciando aplicación..."))#Barra de progreso actualizada
             #Programar reinicio
             Clock.schedule_once(self.close_popup, 2)
             Clock.schedule_once(self.restart_application, 3)
@@ -171,6 +179,26 @@ class MainWindow(BoxLayout):
             logger.error(f"Error en la actualización: {str(e)}")
             error_message = str(e)
             Clock.schedule_once(lambda dt: self.show_error_popup(error_message))
+
+    def copy_and_remplace_with_progress(self, src_dir, dest_dir):
+        file_to_copy = []
+        for root, dirs, files in os.walk(src_dir):
+            for file in files:
+                file_to_copy.append(os.path.join(root, file))
+        total_files = len(file_to_copy)
+        if total_files == 0:
+            return
+        for i, src_file in enumerate(file_to_copy):
+            relative_path = os.path.relpath(src_file, src_dir)
+            dest_file = os.path.join(dest_dir, relative_path)
+            dest_folder = os.path.dirname(dest_file)
+
+            if not os.path.exists(dest_folder):
+                os.makedirs(dest_folder)
+            
+            shutil.copy2(src_file, dest_file)
+            progress = 75 + int((i/total_files)*25)
+            Clock.schedule_once(lambda dt, p=progress: self.increment_progress(p, "Instalando actualización..."))
 
     def show_error_popup(self, error_message):
         content = BoxLayout(orientation='vertical')
@@ -202,9 +230,10 @@ class MainWindow(BoxLayout):
         self.progress_popup.content = layout
         self.progress_popup.open()
 
-    def update_progress(self, value, message):
-        self.progress_bar.value = value
-        self.progress_label.text = message
+    def increment_progress(self, value, message):
+        if hasattr(self, 'progress_bar'):
+            self.progress_bar.value = value
+            self.progress_label.text = message
 
     def close_popup(self, dt):
         if self.progress_popup:
