@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivy.core.text import LabelBase
 import os,shutil, requests, subprocess
 import logging
+import socket
 import sys, threading
 from kivy.resources import resource_add_path
 from kivy.uix.progressbar import ProgressBar
@@ -31,6 +32,13 @@ logging.basicConfig(
 logger = logging.getLogger('Columbia School')
 current_dir = os.path.dirname(os.path.abspath(__file__))
 version_file = os.path.join(current_dir, 'resources', 'version.txt')
+
+def is_connected():
+        try:
+            socket.create_connection(("8.8.8.8", 53), timeout=3)
+            return True
+        except OSError:
+            return False
 class MainWindow(BoxLayout):
     QueriesSQLite.create_tables()
     def __init__(self, **kwargs):
@@ -45,18 +53,25 @@ class MainWindow(BoxLayout):
 
         #Verificar si hay versiones nuevas disponibles
         #self.check_for_updates()
-
+        
     def check_for_updates(self):
         logger.info('Verificando actualizaciones')
-        latest_version = check_for_updates()#obtener version mas reciente en git
-        installed_version = self.get_installed_version()#obtener version instalada
 
-        if latest_version and latest_version==installed_version:
-            logger.info('La aplicación está actualizada.')
+        if not is_connected():
+            logger.warning('No hay conexión a internet. Saltando verificacion de actualizacion')
             return
-        if latest_version:
-            logger.info(f'Nueva versión encontrada: {latest_version}')
-            self.show_update_popup(latest_version)
+        try:
+            latest_version = check_for_updates()#obtener version mas reciente en git
+            installed_version = self.get_installed_version()#obtener version instalada
+
+            if latest_version and latest_version==installed_version:
+                logger.info('La aplicación está actualizada.')
+                return
+            if latest_version:
+                logger.info(f'Nueva versión encontrada: {latest_version}')
+                self.show_update_popup(latest_version)
+        except Exception as e:
+            logger.error(f'Error al verificar actualizaciones: {str(e)}')
     
     def get_installed_version(self):
         if os.path.exists(version_file):
@@ -117,6 +132,12 @@ class MainWindow(BoxLayout):
 
     def download_and_install_update(self, version):
         try:
+
+            if not is_connected():
+                logger.warning('No hay conexión a internet. No se puede descargar la actualización.')
+                Clock.schedule_once(lambda dt: self.show_error_popup("No hay conexión a internet. No se puede descargar la actualización."))
+                return
+            
             #Crear directorio temporal
             tem_dir = os.path.join(os.path.dirname(__file__), 'temp')
             os.makedirs(tem_dir, exist_ok=True)
@@ -172,6 +193,9 @@ class MainWindow(BoxLayout):
             shutil.rmtree(tem_dir)
             self.save_installed_version(version)
             Clock.schedule_once(lambda dt: self.increment_progress(100, "Actualización completada. Reiniciando aplicación..."))#Barra de progreso actualizada
+            #Actualizar el titulo de la ventana con la nueva version
+            app = App.get_running_app()
+            app.title = app.get_app_title()
             #Programar reinicio
             Clock.schedule_once(self.close_popup, 2)
             Clock.schedule_once(self.restart_application, 3)
@@ -243,7 +267,19 @@ class MainWindow(BoxLayout):
 class main(App):
     def build(self):
         logger.info('Construyendo la aplicación principal')
+        self.title = self.get_app_title()
         return MainWindow()
+    
+    def get_app_title(self):
+        app_name = "Columbia School Ventas"
+        version = self.get_installed_version()
+        return f"{app_name} (v{version})" if version else app_name
+    
+    def get_installed_version(self):
+        if os.path.exists(version_file):
+            with open(version_file, 'r') as f:
+                return f.read().strip()
+        return "Desconocida"
     
     
 if __name__ == "__main__":

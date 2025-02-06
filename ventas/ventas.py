@@ -42,7 +42,6 @@ class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,RecycleB
     ''' Adds selection and focus behavior to the view. '''
     touch_deselect_last = BooleanProperty(True)
 
-
 class SelectableBoxLayout(RecycleDataViewBehavior, BoxLayout):
     ''' Add selection support to the Label '''
     index = None
@@ -423,7 +422,7 @@ class WindowVentas(BoxLayout):
     def enviar_email(self, numero_venta, pdf_filename):
         email_sender = 'uniformescolumbia@gmail.com'
         sender_password = 'vjao qrmv dlai ybdo'
-        email_destino = 'jahef5181@gmail.com'
+        email_destino = 'brenda2710@hotmail.com'
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
 

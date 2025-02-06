@@ -587,7 +587,7 @@ class VistaProductos(Screen):
     def enviar_inventario(self):
         email_sender = 'uniformescolumbia@gmail.com'
         sender_password = 'vjao qrmv dlai ybdo'
-        email_destino = 'jahef5181@gmail.com'
+        email_destino = 'brenda2710@hotmail.com'
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
 

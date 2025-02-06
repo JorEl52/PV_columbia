@@ -94,24 +94,22 @@ class QueriesSQLite:
         elimina_tabla_usuarios= """DROP TABLE usuarios"""
         elimina_tabla_uniformes= """DROP TABLE uniformes"""
 
-        QueriesSQLite.execute_query(connection, tabla_uniformes, tuple())
-        QueriesSQLite.execute_query(connection, tabla_usuarios, tuple())
+        #QueriesSQLite.execute_query(connection, tabla_uniformes, tuple())
+        #QueriesSQLite.execute_query(connection, tabla_usuarios, tuple())
         QueriesSQLite.execute_query(connection, tabla_ventas, tuple())
         QueriesSQLite.execute_query(connection, tabla_ventas_detalle, tuple())
         QueriesSQLite.execute_query(connection, tabla_productos_vendidos,tuple())
 
-        # QueriesSQLite.execute_query(connection, eliminar_tabla_ventas_detalle, tuple())
-        # QueriesSQLite.execute_query(connection, eliminar_tabla_ventas, tuple())
-        # QueriesSQLite.execute_query(connection, elimina_tabla_vendidos, tuple())
-        # QueriesSQLite.execute_query(connection, elimina_tabla_usuarios, tuple())
-        # QueriesSQLite.execute_query(connection, elimina_tabla_uniformes, tuple())
+        #QueriesSQLite.execute_query(connection, eliminar_tabla_ventas_detalle, tuple())
+        #QueriesSQLite.execute_query(connection, eliminar_tabla_ventas, tuple())
+        #QueriesSQLite.execute_query(connection, elimina_tabla_vendidos, tuple())
+        #QueriesSQLite.execute_query(connection, elimina_tabla_usuarios, tuple())
+        #QueriesSQLite.execute_query(connection, elimina_tabla_uniformes, tuple())
 
     #Funcion para revisar las columnas de una tabla
     def get_table_columns(connection, table_name):
         query = f"PRAGMA table_info({table_name});"
         return QueriesSQLite.execute_read_query(connection, query)
-
-
 
 if __name__=="__main__":
     connection = QueriesSQLite.create_connection(db_path)
@@ -191,7 +189,7 @@ if __name__=="__main__":
     #  total INTEGER NOT NULL
     # );
     # """
-    QueriesSQLite.execute_query(connection, create_inventario_table, tuple()) 
+    #QueriesSQLite.execute_query(connection, create_inventario_table, tuple()) 
 
     # tabla_uniformes = """
     #     CREATE TABLE IF NO EXISTS uniformes(
