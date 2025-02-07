@@ -1,0 +1,64 @@
+
+#Moodificaciones del .spec
+exe = EXE(
+    pyz,
+    a.scripts,
+    [],
+    exclude_binaries=True,
+    name='VentasColumbia',  # Changed name to match app
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=True,  # Enable for Mac
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon='icons/CS.icns'
+)
+
+coll = COLLECT(
+    exe,
+    Tree('/Users/usuario/Documents/Proyecto_punto_venta/VentasUniforme'),
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='VentasColumbia'  # Match exe name
+)
+
+app = BUNDLE(
+    coll,
+    name='Ventas Columbia.app',
+    icon='icons/CS.icns',
+    bundle_identifier='com.ventascolumbia',  # Added identifier
+    info_plist={
+        'CFBundleName': 'Ventas Columbia',
+        'CFBundleDisplayName': 'Ventas Columbia',
+        'CFBundleExecutable': 'VentasColumbia',
+        'CFBundlePackageType': 'APPL',
+        'LSMinimumSystemVersion': '10.13.0'
+    }
+)
+#/////////////////////////////////////////////////////////////////////////////////////
+
+# Build app
+pyinstaller touchtracer.spec
+
+# Install create-dmg if not installed
+brew install create-dmg
+
+# Create DMG
+create-dmg \
+  --volname "Ventas Columbia" \
+  --volicon "icons/CS.icns" \
+  --window-pos 200 120 \
+  --window-size 800 400 \
+  --icon-size 100 \
+  --icon "Ventas Columbia.app" 200 190 \
+  --app-drop-link 600 185 \
+  "VentasColumbia.dmg" \
+  "dist/Ventas Columbia.app"
