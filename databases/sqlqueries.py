@@ -94,7 +94,7 @@ class QueriesSQLite:
         elimina_tabla_usuarios= """DROP TABLE usuarios"""
         elimina_tabla_uniformes= """DROP TABLE uniformes"""
 
-        #QueriesSQLite.execute_query(connection, tabla_uniformes, tuple())
+        QueriesSQLite.execute_query(connection, tabla_uniformes, tuple())
         #QueriesSQLite.execute_query(connection, tabla_usuarios, tuple())
         QueriesSQLite.execute_query(connection, tabla_ventas, tuple())
         QueriesSQLite.execute_query(connection, tabla_ventas_detalle, tuple())

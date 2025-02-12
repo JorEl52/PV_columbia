@@ -151,7 +151,7 @@ class SelectableEstadisticasLabel(RecycleDataViewBehavior, BoxLayout):
         self.index = index
         self.ids['_hashtag'].text = str(1+index)
         self.ids['_codigo'].text = data['codigo']
-        self.ids['_articulo'].text = data['nombre'].capitalize()
+        self.ids['_articulo'].text = data['nombre'].capitalize() if data['nombre'] else "Producto descontinuado"
         self.ids['_talla'].text = data['talla']
         self.ids['_total_vendidos'].text = data['total']
         return super(SelectableEstadisticasLabel, self).refresh_view_attrs(
@@ -552,12 +552,13 @@ class VistaProductos(Screen):
 
         estadisticas_sql = QueriesSQLite.execute_read_query(connection,query_total_vendidos)
         if estadisticas_sql:
-            for venta in estadisticas_sql:
+            for estadistica in estadisticas_sql:
+                nombre = estadistica[2] if estadistica[2] else "Producto descontinuado"
                 row = [
-                    venta[1],#codigo
-                    venta[2],#nombre
-                    venta[3],#talla
-                    str(venta[4])#total vendido
+                    estadistica[1],#codigo
+                    nombre,#nombre
+                    estadistica[3],#talla
+                    str(estadistica[4])#total vendido
                 ]
                 data.append(row)
 
@@ -587,7 +588,7 @@ class VistaProductos(Screen):
     def enviar_inventario(self):
         email_sender = 'uniformescolumbia@gmail.com'
         sender_password = 'vjao qrmv dlai ybdo'
-        email_destino = 'brenda2710@hotmail.com'
+        email_destino = 'brenda2ventauniformes@gmail.com'
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
 
@@ -966,10 +967,12 @@ class VistaEstadisticas(Screen):
 
         if estadisticas_sql:
             for venta in estadisticas_sql:
+                #Si el producto fue eliminado, usar Producto descontinuado
+                nombre = venta[2] if venta[2] else "Producto descontinuado"
                 _estadisticas.append({
                     'id': venta[0],
                     'codigo': venta[1],
-                    'nombre': venta[2],
+                    'nombre': nombre,
                     'talla': venta[3],
                     'total': str(venta[4]),
                     'seleccionnado': False

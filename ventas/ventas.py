@@ -391,19 +391,19 @@ class WindowVentas(BoxLayout):
         c.setFont("Helvetica", 12)
         y = 550
         c.drawString(100,y, 'Productos')
-        c.drawString(200,y, 'Cant.')
-        c.drawString(260,y,'Talla')
-        c.drawString(300,y, '$/Artículo')
-        c.drawString(380,y,'Total')
+        c.drawString(220,y, 'Cant.')
+        c.drawString(270,y,'Talla')
+        c.drawString(310,y, '$/Artículo')
+        c.drawString(390,y,'Total')
         y -= 20
         c.line(100, y + 10, 500, y + 10)
         y -= 10
         c.setFont("Helvetica", 10)
         for producto in self.ids.rvs.data:
             c.drawString(100, y, producto['nombre'].capitalize())  
-            c.drawString(200,y,str(producto['cantidad_carrito']))
-            c.drawString(260, y, producto['talla'])
-            c.drawString(300,y,f"${producto['precio']:.2f}")
+            c.drawString(220,y,str(producto['cantidad_carrito']))
+            c.drawString(270, y, producto['talla'])
+            c.drawString(310,y,f"${producto['precio']:.2f}")
             total_precio = producto['cantidad_carrito']*producto['precio']
             c.drawString(380,y,f"${total_precio:.2f}")
             y -= 20
@@ -422,7 +422,7 @@ class WindowVentas(BoxLayout):
     def enviar_email(self, numero_venta, pdf_filename):
         email_sender = 'uniformescolumbia@gmail.com'
         sender_password = 'vjao qrmv dlai ybdo'
-        email_destino = 'brenda2710@hotmail.com'
+        email_destino = 'brenda2ventauniformes@gmail.com'
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
 
