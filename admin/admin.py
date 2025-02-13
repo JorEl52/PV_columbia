@@ -101,6 +101,8 @@ class SelectableProductoLabel(RecycleDataViewBehavior, BoxLayout):
         if super(SelectableProductoLabel, self).on_touch_down(touch):
             return True
         if self.collide_point(*touch.pos) and self.selectable:
+            rv = self.parent.parent
+            rv.deselect_all()
             return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -288,6 +290,10 @@ class AdminRV(RecycleView):
                 indice = i
                 break
         return indice
+    def deselect_all(self):
+        for i in self.data:
+            i['seleccionado'] = False
+        self.refresh_from_data()
 
 class ProductoPopup(Popup):
     def __init__(self, agregar_callback, **kwargs):
@@ -410,9 +416,10 @@ class VistaProductos(Screen):
             self.ids.rv_productos.refresh_from_data()
         else:
             if indice >= 0:
-                producto = self.ids.rv_productos.data[indice]
+                producto = self.ids.rv_productos.data[indice].copy()
                 popup = ProductoPopup(self.modificar_producto)
                 popup.abrir(False, producto)
+                self.ids.rv_productos.deselect_all()
 
     def eliminar_producto(self):
         indice = self.ids.rv_productos.dato_seleccionado()
