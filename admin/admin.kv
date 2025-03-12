@@ -526,114 +526,6 @@
         size_hint_x: .2
         color: (0,0,0,1)
 
-<SelectableInventarioAntiguoLabel>:
-    canvas.before:
-        Color:
-            rgba: hex('#F0F0F0') 
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    Label:
-        id: _prenda
-        size_hint_x: .2
-        color: (0,0,0,1)
-    Label:
-        id: _2
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _3
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _4
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _6
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _8
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _10
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _12
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _14
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _16
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _18/28
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _20
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _22
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _24
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _30
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _32
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _34
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _36
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _38
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _40
-        size_hint_x: .028
-        color: (0,0,0,1)
-    Label:
-        id: _CH/42
-        size_hint_x: .053
-        color: (0,0,0,1)
-    Label:
-        id: _MD/44
-        size_hint_x: .053
-        color: (0,0,0,1)
-    Label:
-        id: _GD/46
-        size_hint_x: .053
-        color: (0,0,0,1)
-    Label:
-        id: _XGD
-        size_hint_x: .05
-        color: (0,0,0,1)
-    Label:
-        id: _Total
-        size_hint_x: .053
-        color: (0,0,0,1)
-
 <VistaEstadisticas>:
     name: 'Estadísticas de venta'
     BoxLayout:
@@ -660,113 +552,6 @@
         AdminRV:
             id: estadisticas_rv
             viewclass: 'SelectableEstadisticasLabel'
-
-<VistaInventarioAntiguo>:
-    name: 'Primer inventario'
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: .05
-            spacing: .5
-            LabelOscuro:
-                size_hint_x: .2
-            LabelOscuro:
-                text:'Tallas'
-                size_hint_x: .75
-            LabelOscuro:
-                size_hint_x: .05
-        BoxLayout:
-            size_hint_y: .05
-            spacing:.5
-            padding: .5
-            LabelOscuro:
-                text: 'Prenda'
-                size_hint_x: .2
-            LabelOscuro:
-                text: '2'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '3'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '4'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '6'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '8'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '10'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '12'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '14'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '16'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '18/28'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '20'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '22'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '24'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '30'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '32'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '34'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '36'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '38'
-                size_hint_x: .028
-            LabelOscuro:
-                text: '40'
-                size_hint_x: .028
-            LabelOscuro:
-                text: 'CH/42'
-                size_hint_x: .053
-            LabelOscuro:
-                text: 'MD/44'
-                size_hint_x: .053
-            LabelOscuro:
-                text: 'GD/46'
-                size_hint_x: .053
-            LabelOscuro:
-                text: 'XGD'
-                size_hint_x: .05
-            LabelOscuro:
-                text: 'Total'
-                size_hint_x: .053
-        AdminRV:
-            id: inventario_antiguo_rv
-            viewclass: 'SelectableInventarioAntiguoLabel'
-        BoxLayout:
-            size_hint_y: .05
-            LabelOscuro:
-                size_hint_x: .7
-            LabelOscuro:
-                text: 'Total:'
-                size_hint_x: .2
-            LabelOscuro:
-                id: total_inventario
-                size_hint_x: .1
 
 <CustomDropDown>:
     canvas.before:
@@ -795,12 +580,6 @@
         size_hint_y: None
         height: 44
         on_release: root.vista(self.text)
-    Button:
-        text: 'Primer inventario'
-        size_hint_y: None
-        height: 44
-        on_release: root.vista(self.text)
-
 
 <AdminWindow>:
     id: main_win
@@ -868,8 +647,6 @@
             id: vista_ventas
         VistaEstadisticas:
             id: vista_estadisticas
-        VistaInventarioAntiguo:
-            id: vista_inventario_antiguo
 
     BoxLayout:
         size_hint_y: .05

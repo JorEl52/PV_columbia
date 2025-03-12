@@ -221,56 +221,6 @@ class SelectableVentaLabel(RecycleDataViewBehavior, BoxLayout):
         else:
             rv.data[index]['seleccionado'] = False
 
-class SelectableInventarioAntiguoLabel(RecycleDataViewBehavior, BoxLayout):
-    ''' Add selection support to the Label '''
-    index = None
-    selected = BooleanProperty(False)
-    selectable = BooleanProperty(True)
-
-    def refresh_view_attrs(self, rv, index, data):
-        self.index = index
-        self.ids['_prenda'].text = data['prenda']
-        self.ids['_2'].text = str(data['2'])
-        self.ids['_3'].text = str(data['3'])
-        self.ids['_4'].text = str(data['4'])
-        self.ids['_6'].text = str(data['6'])
-        self.ids['_8'].text = str(data['8'])
-        self.ids['_10'].text = str(data['10'])
-        self.ids['_12'].text = str(data['12'])
-        self.ids['_14'].text = str(data['14'])
-        self.ids['_16'].text = str(data['16'])
-        self.ids['_18/28'].text = str(data['18_28'])
-        self.ids['_20'].text = str(data['20'])
-        self.ids['_22'].text = str(data['22'])
-        self.ids['_24'].text = str(data['24'])
-        self.ids['_30'].text = str(data['30'])
-        self.ids['_32'].text = str(data['32'])
-        self.ids['_34'].text = str(data['34'])
-        self.ids['_36'].text = str(data['36'])
-        self.ids['_38'].text = str(data['38'])
-        self.ids['_40'].text = str(data['40'])
-        self.ids['_CH/42'].text = str(data['CH_42'])
-        self.ids['_MD/44'].text = str(data['MD_44'])
-        self.ids['_GD/46'].text = str(data['GD_46'])
-        self.ids['_XGD'].text = str(data['XGD'])
-        self.ids['_Total'].text = str(data['total'])
-        return super(SelectableInventarioAntiguoLabel, self).refresh_view_attrs(
-            rv, index, data)
-
-    def on_touch_down(self, touch):
-        ''' Add selection on touch down '''
-        if super(SelectableInventarioAntiguoLabel, self).on_touch_down(touch):
-            return True
-        if self.collide_point(*touch.pos) and self.selectable:
-            return self.parent.select_with_touch(self.index, touch)
-
-    def apply_selection(self, rv, index, is_selected):
-        ''' Respond to the selection of items in the view. '''
-        self.selected = is_selected
-        if is_selected:
-            rv.data[index]['seleccionado'] = True
-        else:
-            rv.data[index]['seleccionado'] = False
 
 class AdminRV(RecycleView):
     def __init__(self, **kwargs):
@@ -380,6 +330,21 @@ class VistaProductos(Screen):
         if inventario_sql:
             for producto in inventario_sql:
                 _productos.append({'codigo':producto[0], 'nombre':producto[1], 'talla':producto[2], 'cantidad':producto[4], 'precio': producto[3]})
+            
+            def nombre_key(nombre):
+                return nombre.split('t-')[0].strip()
+            
+            #Funcion para convertir la talla a un valor que se pueda ordenar
+            def talla_key(talla):
+                try:
+                    return (0, int(talla))
+                except:
+                    #usar un valor alto para tallas alfanumericas
+                    talla_orden = {'CH':1, 'MD': 2, 'GD':3, 'XGD':4}
+                    return (1, talla_orden.get(talla.upper(), 5))
+            #Ordenar productos por nombre y por talla
+            _productos.sort(key=lambda x: (nombre_key(x['nombre']), talla_key(x['talla'])))
+
         self.ids.rv_productos.agregar_datos(_productos)
 
     def agregar_producto(self, agregar = False, validado=None):
@@ -595,7 +560,8 @@ class VistaProductos(Screen):
     def enviar_inventario(self):
         email_sender = 'uniformescolumbia@gmail.com'
         sender_password = 'vjao qrmv dlai ybdo'
-        email_destino = 'brenda2ventauniformes@gmail.com'
+        #email_destino = 'brenda2ventauniformes@gmail.com'
+        email_destino = 'jahef5181@gmail.com'
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
 
@@ -987,21 +953,6 @@ class VistaEstadisticas(Screen):
         self.ids.estadisticas_rv.agregar_datos(_estadisticas)
         self.ids.estadisticas_rv.refresh_from_data()
 
-class VistaInventarioAntiguo(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self.cargar_inventario, 1)
-
-    def cargar_inventario(self, *args):
-        _inventario = []
-        final_sum =0
-        inventario_antiguo_sql = QueriesSQLite.execute_read_query(connection, "SELECT * from primer_inventario")
-        if inventario_antiguo_sql:
-            for prenda in inventario_antiguo_sql:
-                final_sum += prenda[24]
-                _inventario.append({'prenda':prenda[0], '2':prenda[1],'3':prenda[2],'4':prenda[3],'6':prenda[4],'8':prenda[5],'10':prenda[6],'12':prenda[7],'14':prenda[8],'16':prenda[9],'18_28':prenda[10],'20':prenda[11],'22':prenda[12],'24':prenda[13],'30':prenda[14],'32':prenda[15],'34':prenda[16],'36':prenda[17],'38':prenda[18],'40':prenda[19],'CH_42':prenda[20],'MD_44':prenda[21],'GD_46':prenda[22],'XGD':prenda[23],'total':prenda[24]})
-        self.ids.inventario_antiguo_rv.agregar_datos(_inventario)
-        self.ids.total_inventario.text = str(final_sum)
         
 class CustomDropDown(DropDown):
     def __init__(self, cambiar_callback, **kwargs):
