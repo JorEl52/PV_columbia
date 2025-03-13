@@ -330,7 +330,8 @@ class VistaProductos(Screen):
         if inventario_sql:
             for producto in inventario_sql:
                 _productos.append({'codigo':producto[0], 'nombre':producto[1], 'talla':producto[2], 'cantidad':producto[4], 'precio': producto[3]})
-            
+                
+            #Función para extraer la parte del nombre antes de la t-
             def nombre_key(nombre):
                 return nombre.split('t-')[0].strip()
             
